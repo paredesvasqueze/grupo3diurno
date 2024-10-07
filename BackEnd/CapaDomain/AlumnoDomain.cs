@@ -3,11 +3,11 @@ using CapaDatos;
 
 namespace CapaDomain
 {
-    public class AlumnoDomain
+    public class Alumnodomain
     {
         private readonly AlumnoRepository _alumnoRepository;
 
-        public AlumnoDomain(AlumnoRepository alumnoRepository)
+        public Alumnodomain(AlumnoRepository alumnoRepository)
         {
            
                 _alumnoRepository = alumnoRepository;     

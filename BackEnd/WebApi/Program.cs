@@ -14,11 +14,18 @@ builder.Services.AddSingleton(provider =>
 
 // Registrar el repositorio y la capa de dominio
 builder.Services.AddScoped<AlumnoRepository>();
-builder.Services.AddScoped<AlumnoDomain>();
+builder.Services.AddScoped<Alumnodomain>();
+builder.Services.AddScoped<proveedorrepository>();
+builder.Services.AddScoped<proveedorDomain>();
+
 
 builder.Services.AddScoped<CompraRepository>();
 builder.Services.AddScoped<CompraDomain>();
 
+
+
+builder.Services.AddScoped<CategoriaRepository>();
+builder.Services.AddScoped<CategoriaDomain>();
 // Registrar los controladores
 builder.Services.AddControllers();
 
