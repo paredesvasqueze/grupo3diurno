@@ -15,6 +15,10 @@ builder.Services.AddSingleton(provider =>
 // Registrar el repositorio y la capa de dominio
 builder.Services.AddScoped<AlumnoRepository>();
 builder.Services.AddScoped<Alumnodomain>();
+
+builder.Services.AddScoped<clienteRepository>();
+builder.Services.AddScoped<clienteDomain>();
+
 builder.Services.AddScoped<proveedorrepository>();
 builder.Services.AddScoped<proveedorDomain>();
 
