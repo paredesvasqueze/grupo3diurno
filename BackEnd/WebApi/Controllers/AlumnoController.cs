@@ -8,9 +8,9 @@ namespace WebApi.Controllers
     [Route("[controller]")]
     public class AlumnoController : ControllerBase
     {
-        private readonly AlumnoDomain _alumnoDomain;
+        private readonly Alumnodomain _alumnoDomain;
 
-        public AlumnoController(AlumnoDomain alumnoDomain)
+        public AlumnoController(Alumnodomain alumnoDomain)
         {
             _alumnoDomain = alumnoDomain;
         }
