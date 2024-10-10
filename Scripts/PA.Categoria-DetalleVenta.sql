@@ -78,3 +78,49 @@ END;
 GO
 
 
+
+
+CREATE PROCEDURE USP_Insert_DetalleVenta
+    @nidventa INT,
+    @nidproducto INT,
+    @ncantidad INT,
+    @npreciounitario DECIMAL(10, 2)
+AS
+BEGIN
+    INSERT INTO detalleventa (nidventa, nidproducto, ncantidad, npreciounitario)
+    VALUES (@nidventa, @nidproducto, @ncantidad, @npreciounitario);
+END;
+
+
+CREATE PROCEDURE USP_Actualizar_DetalleVenta
+    @niddetalle INT,
+    @nidventa INT,
+    @nidproducto INT,
+    @ncantidad INT,
+    @npreciounitario DECIMAL(10, 2)
+AS
+BEGIN
+    UPDATE detalleventa
+    SET nidventa = @nidventa,
+        nidproducto = @nidproducto,
+        ncantidad = @ncantidad,
+        npreciounitario = @npreciounitario
+    WHERE niddetalle = @niddetalle;
+END;
+
+
+CREATE PROCEDURE USP_Eliminar_DetalleVenta
+    @niddetalle INT
+AS
+BEGIN
+    DELETE FROM detalleventa
+    WHERE niddetalle = @niddetalle;
+END;
+GO
+
+CREATE PROCEDURE USP_Seleccionar_DetallesVenta
+AS
+BEGIN
+    SELECT * FROM detalleventa;
+END;
+GO

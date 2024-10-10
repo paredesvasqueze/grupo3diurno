@@ -11,81 +11,77 @@ using Dapper;
 
 namespace CapaDatos
 {
-    public class detalleventaRepository
+    public class MetodopagoRepository
     {
         private readonly ConexionSingleton _conexionSingleton;
 
         // Constructor que recibe el singleton de conexión
-        public detalleventaRepository(ConexionSingleton conexionSingleton)
+        public MetodopagoRepository(ConexionSingleton conexionSingleton)
         {
             _conexionSingleton = conexionSingleton;
         }
 
-        // Método para obtener una lista de detalleventas
-        public IEnumerable<detalleventa> ObtenerdetalleventaTodos()
+        // Método para obtener una lista de Metodopagos
+        public IEnumerable<Metodopago> ObtenerMetodopagoTodos()
         {
-            var detalleventas = new List<detalleventa>();
+            var Metodopagos = new List<Metodopago>();
 
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
-                IEnumerable<detalleventa> lstFound = new List<detalleventa>();
-                var query = "USP_GET_detalleventa_Todos";
+                IEnumerable<Metodopago> lstFound = new List<Metodopago>();
+                var query = "ObtenerMetodopagoTodos";
                 var param = new DynamicParameters();
                 //param.Add("@nConstGrupo", nConstGrupo, dbType: DbType.Int32);
-                lstFound = SqlMapper.Query<detalleventa>(connection, query, param, commandType: CommandType.StoredProcedure);
+                lstFound = SqlMapper.Query<Metodopago>(connection, query, param, commandType: CommandType.StoredProcedure);
                 return lstFound;              
                 
             }
         }
 
-        public int Insertardetalleventa(detalleventa odetalleventa)
+        public int InsertarMetodopago(Metodopago oMetodopago)
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
-       
-                var query = "USP_Insert_detalleventa";
+                
+                var query = "InsertarMetodopago";
                 var param = new DynamicParameters();
-                param.Add("@nidventa", odetalleventa.nidventa);
-                param.Add("@nidproducto", odetalleventa.nidproducto);
-                param.Add("@ncantidad", odetalleventa.ncantidad);
-                param.Add("@npreciounitario", odetalleventa.npreciounitario);
+                param.Add("@nidmetodopago", oMetodopago.nidmetodopago);
+                param.Add("@cmetodopago", oMetodopago.cmetodopago);             
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);                
             }
 
 
         }
-
-
-        public int actualizardetalleventa(detalleventa odetalleventa)
+        public int ActualizarMetodopago(Metodopago oMetodopago)
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
 
-                var query = "USP_Actualizar_detalleventa";
+                var query = "ActualizarMetodopago";
                 var param = new DynamicParameters();
-                param.Add("@nidproducto", odetalleventa.nidproducto);
-                param.Add("@ncantidad", odetalleventa.ncantidad);
-                param.Add("@npreciounitario", odetalleventa.npreciounitario);
+                param.Add("@nidmetodopago", oMetodopago.nidmetodopago);
+                param.Add("@cmetodopago", oMetodopago.cmetodopago);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
             }
+
 
         }
-
-
-        public int eliminardetalleventa(detalleventa odetalleventa)
+        public int EliminarMetodopago(Metodopago oMetodopago)
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
 
-                var query = "USP_Eliminar_detalleventa";
+                var query = "EliminarMetodopago";
                 var param = new DynamicParameters();
-                param.Add("@nidventa", odetalleventa.niddetalle);
+                param.Add("@nidmetodopago", oMetodopago.nidmetodopago);
+                param.Add("@cmetodopago", oMetodopago.cmetodopago);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
             }
+
 
         }
 
