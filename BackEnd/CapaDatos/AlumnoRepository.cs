@@ -43,7 +43,7 @@ namespace CapaDatos
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
-                connection.Open();
+                connection.Open();                         
                 
                 var query = "USP_Insert_Alumno";
                 var param = new DynamicParameters();
