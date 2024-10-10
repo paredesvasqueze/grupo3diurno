@@ -36,6 +36,9 @@ builder.Services.AddScoped<CompraDomain>();
 builder.Services.AddScoped<CategoriaRepository>();
 builder.Services.AddScoped<CategoriaDomain>();
 
+builder.Services.AddScoped<MetodopagoRepository>();
+builder.Services.AddScoped<MetodopagoDomain>();
+
 // Registrar los controladores
 builder.Services.AddControllers();
 
