@@ -11,75 +11,76 @@ using Dapper;
 
 namespace CapaDatos
 {
-    public class proveedorrepository
+    public class VentaRepository
     {
         private readonly ConexionSingleton _conexionSingleton;
 
         // Constructor que recibe el singleton de conexión
-        public proveedorrepository(ConexionSingleton conexionSingleton)
+        public VentaRepository(ConexionSingleton conexionSingleton)
         {
             _conexionSingleton = conexionSingleton;
         }
 
-        // Método para obtener una lista de proveedors
-        public IEnumerable<proveedor> ObtenerproveedorTodos()
+        // Método para obtener una lista de ventas
+        public IEnumerable<venta> ObtenerventaTodos()
         {
-            var proveedors = new List<proveedor>();
+            var ventas = new List<venta>();
 
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
-                IEnumerable<proveedor> lstFound = new List<proveedor>();
-                var query = "USE_GET_proveedor_Todos";
+                IEnumerable<venta> lstFound = new List<venta>();
+                var query = "USP_GET_venta_todos";
                 var param = new DynamicParameters();
                 //param.Add("@nConstGrupo", nConstGrupo, dbType: DbType.Int32);
-                lstFound = SqlMapper.Query<proveedor>(connection, query, param, commandType: CommandType.StoredProcedure);
+                lstFound = SqlMapper.Query<venta>(connection, query, param, commandType: CommandType.StoredProcedure);
                 return lstFound;
 
             }
         }
 
-        public int Insertarproveedor(proveedor oproveedor)
+        public int Insertarventa(venta oventa)
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
 
-                var query = "USP_INSERT_proveedor";
+                var query = "USP_INSERT_venta";
                 var param = new DynamicParameters();
-                param.Add("@cnombreProveedor", oproveedor.cnombreProveedor);
-                param.Add("@ccontacto", oproveedor.ccontacto);
-                param.Add("@ctelefono", oproveedor.ctelefono);
-                param.Add("@cemail", oproveedor.cemail);
-                return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
-            }
-
-
-        }
-        public int Actualizarproveedor(proveedor oproveedor)
-        {
-            using (var connection = _conexionSingleton.GetConnection())
-            {
-                connection.Open();
-
-                var query = "USP_Actualizarproveedor";
-                var param = new DynamicParameters();
-                param.Add("@cidProveedor", oproveedor.cidProveedor);
-                param.Add("@cnombreProveedor", oproveedor.cnombreProveedor);
-                param.Add("@ccontacto", oproveedor.ccontacto);
-                param.Add("@ctelefono", oproveedor.ctelefono);
+                param.Add("@nidcliente", oventa.nidcliente);
+                param.Add("@nidempleado", oventa.nidempleado);
+                param.Add("@dfechaventa", oventa.dfechaventa);
+                param.Add("@ntotal", oventa.ntotal);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
             }
         }
-        public int Eliminarproveedor(proveedor oproveedor)
+
+        public int Actualizarventa(venta oventa)
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
 
-                var query = "USP_Eliminarproveedor";
+                var query = "USP_ActualizarVenta";
                 var param = new DynamicParameters();
-                param.Add("@cidProveedor", oproveedor.cidProveedor);
+                param.Add("@nidVenta", oventa.nidVenta);
+                param.Add("@nidcliente", oventa.nidcliente);
+                param.Add("@nidempleado", oventa.nidempleado);
+                param.Add("@dfechaventa", oventa.dfechaventa);
+                param.Add("@ntotal", oventa.ntotal);
+                return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
+            }
+        }
+
+        public int Eliminarventa(venta oventa)
+        {
+            using (var connection = _conexionSingleton.GetConnection())
+            {
+                connection.Open();
+
+                var query = "USP_EliminarVenta";
+                var param = new DynamicParameters();
+                param.Add("@nidVenta", oventa.nidVenta);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
             }
         }

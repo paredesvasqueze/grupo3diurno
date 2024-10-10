@@ -23,11 +23,11 @@ builder.Services.AddScoped<EmpleadoRepository>();
 builder.Services.AddScoped<EmpleadoDomain>();
 
 
-
 builder.Services.AddScoped<CompraRepository>();
 builder.Services.AddScoped<CompraDomain>();
 
-
+builder.Services.AddScoped<VentaRepository>();
+builder.Services.AddScoped<VentaDomain>();
 
 builder.Services.AddScoped<CategoriaRepository>();
 builder.Services.AddScoped<CategoriaDomain>();
