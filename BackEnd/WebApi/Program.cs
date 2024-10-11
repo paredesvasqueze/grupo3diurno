@@ -19,7 +19,7 @@ builder.Services.AddScoped<Alumnodomain>();
 builder.Services.AddScoped<clienteRepository>();
 builder.Services.AddScoped<clienteDomain>();
 
-builder.Services.AddScoped<DetalleVentaDomain>();
+builder.Services.AddScoped<DetallecompraDomain>();
 builder.Services.AddScoped<DetalleVentaRepository>();
 
 
@@ -46,7 +46,7 @@ builder.Services.AddScoped<MetodopagoRepository>();
 builder.Services.AddScoped<MetodopagoDomain>();
 
 builder.Services.AddScoped<DetalleVentaRepository>();
-builder.Services.AddScoped<DetalleVentaDomain>();
+builder.Services.AddScoped<DetallecompraDomain>();
 
 // Registrar los controladores
 builder.Services.AddControllers();

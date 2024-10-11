@@ -11,80 +11,80 @@ using Dapper;
 
 namespace CapaDatos
 {
-    public class DetalleVentaRepository
+    public class DetallecompraRepository
     {
         private readonly ConexionSingleton _conexionSingleton;
 
         // Constructor que recibe el singleton de conexión
-        public DetalleVentaRepository(ConexionSingleton conexionSingleton)
+        public DetallecompraRepository(ConexionSingleton conexionSingleton)
         {
             _conexionSingleton = conexionSingleton;
         }
 
-        // Método para obtener una lista de DetalleVentas
-        public IEnumerable<DetalleVenta> ObtenerDetalleVentaTodos()
+        // Método para obtener una lista de Detallecompras
+        public IEnumerable<Detallecompra> ObtenerDetallecompraTodos()
         {
-            var DetalleVentas = new List<DetalleVenta>();
+            var Detallecompras = new List<Detallecompra>();
 
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
-                IEnumerable<DetalleVenta> lstFound = new List<DetalleVenta>();
-                var query = "USP_Seleccionar_DetalleVenta";
+                IEnumerable<Detallecompra> lstFound = new List<Detallecompra>();
+                var query = "USP_Seleccionar_Detallecompra";
                 var param = new DynamicParameters();
                 //param.Add("@nConstGrupo", nConstGrupo, dbType: DbType.Int32);
-                lstFound = SqlMapper.Query<DetalleVenta>(connection, query, param, commandType: CommandType.StoredProcedure);
+                lstFound = SqlMapper.Query<Detallecompra>(connection, query, param, commandType: CommandType.StoredProcedure);
                 return lstFound;
 
             }
         }
 
-        public int InsertDetalleVenta(DetalleVenta oDetalleVenta)
+        public int InsertDetallecompra(Detallecompra oDetallecompra)
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
 
-                var query = "USP_Insert_DetalleVenta";
+                var query = "USP_Insert_Detallecompra";
                 var param = new DynamicParameters();
-                param.Add("@nidproducto", oDetalleVenta.nidproducto);
-                param.Add("@nidventa", oDetalleVenta.nidventa);
-                param.Add("@ncantidad", oDetalleVenta.ncantidad);
-                param.Add("@npreciounitario", oDetalleVenta.npreciounitario);
+                param.Add("@nidproducto", oDetallecompra.nidproducto);
+                param.Add("@nidventa", oDetallecompra.nidventa);
+                param.Add("@ncantidad", oDetallecompra.ncantidad);
+                param.Add("@npreciounitario", oDetallecompra.npreciounitario);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
             }
 
 
         }
 
-        public int ActualizarDetalleVenta(DetalleVenta oDetalleVenta)
+        public int ActualizarDetallecompra(Detallecompra oDetallecompra)
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
 
-                var query = "USP_Actualizar_DetalleVenta";
+                var query = "USP_Actualizar_Detallecompra";
                 var param = new DynamicParameters();
-                param.Add("@niddetalle", oDetalleVenta.niddetalle);
-                param.Add("@nidproducto", oDetalleVenta.nidproducto);
-                param.Add("@nidventa", oDetalleVenta.nidventa);
-                param.Add("@ncantidad", oDetalleVenta.ncantidad);
-                param.Add("@npreciounitario", oDetalleVenta.npreciounitario);
+                param.Add("@niddetalle", oDetallecompra.niddetalle);
+                param.Add("@nidproducto", oDetallecompra.nidproducto);
+                param.Add("@nidventa", oDetallecompra.nidventa);
+                param.Add("@ncantidad", oDetallecompra.ncantidad);
+                param.Add("@npreciounitario", oDetallecompra.npreciounitario);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
             }
 
 
         }
 
-        public int EliminarDetalleVenta(DetalleVenta oDetalleVenta)
+        public int EliminarDetallecompra(Detallecompra oDetallecompra)
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
 
-                var query = "USP_Eliminar_DetalleVenta";
+                var query = "USP_Eliminar_Detallecompra";
                 var param = new DynamicParameters();
-                param.Add("@niddetalle", oDetalleVenta.niddetalle);
+                param.Add("@niddetalle", oDetallecompra.niddetalle);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
             }
 

@@ -1,10 +1,8 @@
 ﻿namespace CapaEntidad
 {
-    public class DetalleVenta
+    public class Detallecompra
     {
-        public int niddetalle { get; set; }
-
-        public int nidventa { get; set; }
+        public int nidcompra { get; set; }
 
         public int nidproducto { get; set; }
 
