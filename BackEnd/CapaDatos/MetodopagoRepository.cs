@@ -11,77 +11,79 @@ using Dapper;
 
 namespace CapaDatos
 {
-    public class proveedorrepository
+    public class MetodopagoRepository
     {
         private readonly ConexionSingleton _conexionSingleton;
 
         // Constructor que recibe el singleton de conexión
-        public proveedorrepository(ConexionSingleton conexionSingleton)
+        public MetodopagoRepository(ConexionSingleton conexionSingleton)
         {
             _conexionSingleton = conexionSingleton;
         }
 
-        // Método para obtener una lista de proveedors
-        public IEnumerable<proveedor> ObtenerproveedorTodos()
+        // Método para obtener una lista de Metodopagos
+        public IEnumerable<Metodopago> ObtenerMetodopagoTodos()
         {
-            var proveedors = new List<proveedor>();
+            var Metodopagos = new List<Metodopago>();
 
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
-                IEnumerable<proveedor> lstFound = new List<proveedor>();
-                var query = "USE_GET_proveedor_Todos";
+                IEnumerable<Metodopago> lstFound = new List<Metodopago>();
+                var query = "ObtenerMetodopagoTodos";
                 var param = new DynamicParameters();
                 //param.Add("@nConstGrupo", nConstGrupo, dbType: DbType.Int32);
-                lstFound = SqlMapper.Query<proveedor>(connection, query, param, commandType: CommandType.StoredProcedure);
-                return lstFound;
-
+                lstFound = SqlMapper.Query<Metodopago>(connection, query, param, commandType: CommandType.StoredProcedure);
+                return lstFound;              
+                
             }
         }
 
-        public int Insertarproveedor(proveedor oproveedor)
+        public int InsertarMetodopago(Metodopago oMetodopago)
+        {
+            using (var connection = _conexionSingleton.GetConnection())
+            {
+                connection.Open();
+                
+                var query = "InsertarMetodopago";
+                var param = new DynamicParameters();
+                param.Add("@nidmetodopago", oMetodopago.nidmetodopago);
+                param.Add("@cmetodopago", oMetodopago.cmetodopago);             
+                return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);                
+            }
+
+
+        }
+        public int ActualizarMetodopago(Metodopago oMetodopago)
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
 
-                var query = "USP_INSERT_proveedor";
+                var query = "ActualizarMetodopago";
                 var param = new DynamicParameters();
-                param.Add("@cnombreProveedor", oproveedor.cnombreProveedor);
-                param.Add("@ccontacto", oproveedor.ccontacto);
-                param.Add("@ctelefono", oproveedor.ctelefono);
-                param.Add("@cemail", oproveedor.cemail);
+                param.Add("@nidmetodopago", oMetodopago.nidmetodopago);
+                param.Add("@cmetodopago", oMetodopago.cmetodopago);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
             }
 
 
         }
-        public int Actualizarproveedor(proveedor oproveedor)
+        public int EliminarMetodopago(Metodopago oMetodopago)
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
 
-                var query = "USP_Actualizarproveedor";
+                var query = "EliminarMetodopago";
                 var param = new DynamicParameters();
-                param.Add("@cidProveedor", oproveedor.cidProveedor);
-                param.Add("@cnombreProveedor", oproveedor.cnombreProveedor);
-                param.Add("@ccontacto", oproveedor.ccontacto);
-                param.Add("@ctelefono", oproveedor.ctelefono);
+                param.Add("@nidmetodopago", oMetodopago.nidmetodopago);
+                param.Add("@cmetodopago", oMetodopago.cmetodopago);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
             }
-        }
-        public int Eliminarproveedor(proveedor oproveedor)
-        {
-            using (var connection = _conexionSingleton.GetConnection())
-            {
-                connection.Open();
 
-                var query = "USP_Eliminarproveedor";
-                var param = new DynamicParameters();
-                param.Add("@cidProveedor", oproveedor.cidProveedor);
-                return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
-            }
+
         }
+
     }
 }

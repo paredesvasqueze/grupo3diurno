@@ -3,12 +3,12 @@ using CapaDomain;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Cargar la configuración desde appsettings.json
+// Cargar la configuraciÃ³n desde appsettings.json
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
-// Registrar el patrón Singleton para la conexión a la base de datos
+// Registrar el patrÃ³n Singleton para la conexiÃ³n a la base de datos
 builder.Services.AddSingleton(provider =>
     ConexionSingleton.GetInstance(provider.GetRequiredService<IConfiguration>()));
 
@@ -19,6 +19,11 @@ builder.Services.AddScoped<Alumnodomain>();
 builder.Services.AddScoped<clienteRepository>();
 builder.Services.AddScoped<clienteDomain>();
 
+builder.Services.AddScoped<DetallecompraDomain>();
+builder.Services.AddScoped<DetallecompraRepository>();
+
+
+
 builder.Services.AddScoped<proveedorrepository>();
 builder.Services.AddScoped<proveedorDomain>();
 
@@ -27,17 +32,21 @@ builder.Services.AddScoped<EmpleadoRepository>();
 builder.Services.AddScoped<EmpleadoDomain>();
 
 
-
 builder.Services.AddScoped<CompraRepository>();
 builder.Services.AddScoped<CompraDomain>();
 
-
+builder.Services.AddScoped<VentaRepository>();
+builder.Services.AddScoped<VentaDomain>();
 
 builder.Services.AddScoped<CategoriaRepository>();
 builder.Services.AddScoped<CategoriaDomain>();
 
+
+builder.Services.AddScoped<MetodopagoRepository>();
+builder.Services.AddScoped<MetodopagoDomain>();
+
 builder.Services.AddScoped<DetalleVentaRepository>();
-builder.Services.AddScoped<DetalleVentaDomain>();
+builder.Services.AddScoped<DetallecompraDomain>();
 
 // Registrar los controladores
 builder.Services.AddControllers();
