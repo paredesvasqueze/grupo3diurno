@@ -80,7 +80,7 @@ GO
 
 
 
-CREATE PROCEDURE USP_Insert_DetalleVenta
+alter PROCEDURE USP_Insert_DetalleVenta
     @nidventa INT,
     @nidproducto INT,
     @ncantidad INT,
@@ -89,10 +89,13 @@ AS
 BEGIN
     INSERT INTO detalleventa (nidventa, nidproducto, ncantidad, npreciounitario)
     VALUES (@nidventa, @nidproducto, @ncantidad, @npreciounitario);
+
+
+	select cast(SCOPE_IDENTITY() as int)
 END;
 
 
-CREATE PROCEDURE USP_Actualizar_DetalleVenta
+alter PROCEDURE USP_Actualizar_DetalleVenta
     @niddetalle INT,
     @nidventa INT,
     @nidproducto INT,
@@ -106,21 +109,45 @@ BEGIN
         ncantidad = @ncantidad,
         npreciounitario = @npreciounitario
     WHERE niddetalle = @niddetalle;
+
+
+	select cast(@@ROWCOUNT as int)
 END;
 
 
-CREATE PROCEDURE USP_Eliminar_DetalleVenta
+alter PROCEDURE USP_Eliminar_DetalleVenta
     @niddetalle INT
 AS
 BEGIN
     DELETE FROM detalleventa
     WHERE niddetalle = @niddetalle;
+
+	select cast(@@ROWCOUNT as int)
 END;
 GO
 
-CREATE PROCEDURE USP_Seleccionar_DetallesVenta
+CREATE PROCEDURE USP_Seleccionar_DetalleVenta
 AS
 BEGIN
     SELECT * FROM detalleventa;
 END;
 GO
+
+
+
+
+
+
+
+
+
+
+alter PROCEDURE USP_Insert_DetalleVenta
+    @nidproducto INT,
+    @ncantidad INT,
+    @npreciounitario DECIMAL(10, 2)
+AS
+BEGIN
+    INSERT INTO detalleventa (nidproducto, ncantidad, npreciounitario)
+    VALUES (@nidproducto, @ncantidad, @npreciounitario);
+END;
