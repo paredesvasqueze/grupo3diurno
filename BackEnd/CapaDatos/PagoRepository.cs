@@ -11,75 +11,83 @@ using Dapper;
 
 namespace CapaDatos
 {
-    public class MetodopagoRepository
+    public class PagoRepository
     {
         private readonly ConexionSingleton _conexionSingleton;
 
         // Constructor que recibe el singleton de conexión
-        public MetodopagoRepository(ConexionSingleton conexionSingleton)
+        public PagoRepository(ConexionSingleton conexionSingleton)
         {
             _conexionSingleton = conexionSingleton;
         }
 
-        // Método para obtener una lista de Metodopagos
-        public IEnumerable<Metodopago> ObtenerMetodopagoTodos()
+        // Método para obtener una lista de Pagos
+        public IEnumerable<Pago> ObtenerPagoTodos()
         {
-            var Metodopagos = new List<Metodopago>();
+            var Pagos = new List<Pago>();
 
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
-                IEnumerable<Metodopago> lstFound = new List<Metodopago>();
-                var query = "ObtenerMetodopagoTodos";
+                IEnumerable<Pago> lstFound = new List<Pago>();
+                var query = "USP_GET_Pago_Todos";
                 var param = new DynamicParameters();
                 //param.Add("@nConstGrupo", nConstGrupo, dbType: DbType.Int32);
-                lstFound = SqlMapper.Query<Metodopago>(connection, query, param, commandType: CommandType.StoredProcedure);
+                lstFound = SqlMapper.Query<Pago>(connection, query, param, commandType: CommandType.StoredProcedure);
                 return lstFound;              
                 
             }
         }
 
-        public int InsertarMetodopago(Metodopago oMetodopago)
+        public int InsertarPago(Pago oPago)
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
-                
-                var query = "InsertarMetodopago";
+       
+                var query = "USP_INSERT_Pago";
                 var param = new DynamicParameters();
-                param.Add("@cmetodopago", oMetodopago.cmetodopago);             
+                param.Add("@nidventa", oPago.nidventa);
+                param.Add("@dfechapago", oPago.dfechapago);
+                param.Add("@nmonto", oPago.nmonto);
+                param.Add("@nidmetodopago", oPago.nidmetodopago);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);                
             }
 
 
         }
-        public int ActualizarMetodopago(Metodopago oMetodopago)
+
+
+        public int ActualizarPago(Pago oPago)
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
 
-                var query = "ActualizarMetodopago";
+                var query = "USP_Actualizar_Pago";
                 var param = new DynamicParameters();
-                param.Add("@nidmetodopago", oMetodopago.nidmetodopago);
-                param.Add("@cmetodopago", oMetodopago.cmetodopago);
+                param.Add("@nidpago", oPago.nidpago);
+                param.Add("@nidventa", oPago.nidventa);
+                param.Add("@nmonto", oPago.nmonto);
+                param.Add("@dfechapago", oPago.dfechapago);
+                param.Add("@nidmetodopago", oPago.nidmetodopago);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
             }
-
 
         }
-        public int EliminarMetodopago(Metodopago oMetodopago)
+
+
+        public int EliminarPago(Pago oPago)
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
 
-                var query = "EliminarMetodopago";
+                var query = "USP_EliminarPago";
                 var param = new DynamicParameters();
-                param.Add("@nidmetodopago", oMetodopago.nidmetodopago);
+                param.Add("@nidpago", oPago.nidpago);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
             }
-
 
         }
 

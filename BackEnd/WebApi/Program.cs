@@ -48,6 +48,12 @@ builder.Services.AddScoped<MetodopagoDomain>();
 builder.Services.AddScoped<DetalleVentaRepository>();
 builder.Services.AddScoped<DetalleVentaDomain>();
 
+builder.Services.AddScoped<PagoRepository>();
+builder.Services.AddScoped<PagoDomain>();
+
+builder.Services.AddScoped<productodomain>();
+builder.Services.AddScoped<productorepository>();
+
 // Registrar los controladores
 builder.Services.AddControllers();
 

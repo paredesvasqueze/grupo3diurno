@@ -30,7 +30,7 @@ namespace CapaDatos
             {
                 connection.Open();
                 IEnumerable<Detallecompra> lstFound = new List<Detallecompra>();
-                var query = "USP_Seleccionar_Detallecompra";
+                var query = "USP_GET_detallecompra_Todos";
                 var param = new DynamicParameters();
                 //param.Add("@nConstGrupo", nConstGrupo, dbType: DbType.Int32);
                 lstFound = SqlMapper.Query<Detallecompra>(connection, query, param, commandType: CommandType.StoredProcedure);
@@ -47,6 +47,7 @@ namespace CapaDatos
 
                 var query = "USP_Insert_Detallecompra";
                 var param = new DynamicParameters();
+                param.Add("@nidcompra", oDetallecompra.nidcompra);
                 param.Add("@nidproducto", oDetallecompra.nidproducto);
                 param.Add("@ncantidad", oDetallecompra.ncantidad);
                 param.Add("@npreciounitario", oDetallecompra.npreciounitario);
@@ -65,6 +66,7 @@ namespace CapaDatos
                 var query = "USP_Actualizar_Detallecompra";
                 var param = new DynamicParameters();
                 param.Add("@niddetallecompra", oDetallecompra.niddetallecompra);
+                param.Add("@nidcompra", oDetallecompra.nidcompra);
                 param.Add("@nidproducto", oDetallecompra.nidproducto);
                 param.Add("@ncantidad", oDetallecompra.ncantidad);
                 param.Add("@npreciounitario", oDetallecompra.npreciounitario);
@@ -82,7 +84,7 @@ namespace CapaDatos
 
                 var query = "USP_Eliminar_Detallecompra";
                 var param = new DynamicParameters();
-                param.Add("@niddetalle", oDetallecompra.niddetallecompra);
+                param.Add("@niddetallecompra", oDetallecompra.niddetallecompra);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
             }
 

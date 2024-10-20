@@ -64,10 +64,11 @@ namespace CapaDatos
 
                 var query = "USP_Actualizarproveedor";
                 var param = new DynamicParameters();
-                param.Add("@cidProveedor", oproveedor.cidProveedor);
+                param.Add("@nidProveedor", oproveedor.nidProveedor);
                 param.Add("@cnombreProveedor", oproveedor.cnombreProveedor);
                 param.Add("@ccontacto", oproveedor.ccontacto);
                 param.Add("@ctelefono", oproveedor.ctelefono);
+                param.Add("@cemail", oproveedor.cemail);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
             }
         }
@@ -79,7 +80,7 @@ namespace CapaDatos
 
                 var query = "USP_Eliminarproveedor";
                 var param = new DynamicParameters();
-                param.Add("@cidProveedor", oproveedor.cidProveedor);
+                param.Add("@nidProveedor", oproveedor.nidProveedor);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
             }
         }

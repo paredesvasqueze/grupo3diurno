@@ -2,7 +2,7 @@
 {
     public class proveedor
     {
-        public int cidProveedor { get; set; }
+        public int nidProveedor { get; set; }
         public string cnombreProveedor { get; set; }
         public string ccontacto { get; set; }
         public string ctelefono { get; set; }

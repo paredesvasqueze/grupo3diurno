@@ -76,9 +76,9 @@ namespace CapaDatos
             {
                 connection.Open();
 
-                var query = "USP_Eliminar_Categoria";
+                var query = "USP_Eliminar_categoria";
                 var param = new DynamicParameters();
-                param.Add("@nidcategoriabre", oCategoria.nidcategoria);
+                param.Add("@nidcategoria", oCategoria.nidcategoria);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
             }
 
