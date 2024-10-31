@@ -47,6 +47,7 @@ namespace CapaDatos
                 
                 var query = "InsertarCompra";
                 var param = new DynamicParameters();
+                param.Add("@nidproveedor", oCompra.nidproveedor);
                 param.Add("@dfechacompra", oCompra.dfechacompra);
                 param.Add("@ntotal", oCompra.ntotal);             
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);                
@@ -62,6 +63,8 @@ namespace CapaDatos
 
                 var query = "ActualizarCompra";
                 var param = new DynamicParameters();
+                param.Add("@nidcompra", oCompra.nidcompra);
+                param.Add("@nidproveedor", oCompra.nidproveedor);
                 param.Add("@dfechacompra", oCompra.dfechacompra);
                 param.Add("@ntotal", oCompra.ntotal);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
@@ -75,10 +78,9 @@ namespace CapaDatos
             {
                 connection.Open();
 
-                var query = "EliminarCompra";
+                var query = "USP_Eliminar_Compra";
                 var param = new DynamicParameters();
-                param.Add("@dfechacompra", oCompra.dfechacompra);
-                param.Add("@ntotal", oCompra.ntotal);
+                param.Add("@nidcompra", oCompra.nidcompra);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
             }
 

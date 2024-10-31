@@ -38,7 +38,7 @@ namespace WebApi.Controllers
             return Ok(id);
         }
 
-        [HttpDelete("EliminarProducto/{id}")]
+        [HttpDelete("EliminarProducto")]
         public IActionResult EliminarProducto(int id)
         {
             var resultado = _productoDomain.EliminarProducto(id);

@@ -67,9 +67,12 @@ namespace CapaDatos
 
                 var query = "USP_Actualizar_cliente";
                 var param = new DynamicParameters();
+                param.Add("@nidcliente", ocliente.nidcliente);
                 param.Add("@cnombre", ocliente.cnombre);
                 param.Add("@capellido", ocliente.capellido);
                 param.Add("@cemail", ocliente.cemail);
+                param.Add("@ctelefono", ocliente.ctelefono);
+                param.Add("@cdni", ocliente.cdni);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
             }
 
