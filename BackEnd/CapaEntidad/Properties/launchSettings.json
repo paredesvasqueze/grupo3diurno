@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "CapaEntidad": {
+      "commandName": "Project",
+      "commandLineArgs": "          ",
+      "nativeDebugging": false
+    },
+    "Perfil 1": {
+      "commandName": "Executable"
+    }
+  }
+}

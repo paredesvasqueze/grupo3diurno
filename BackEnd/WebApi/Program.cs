@@ -1,7 +1,29 @@
 using CapaDatos;
 using CapaDomain;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+});
 
 // Cargar la configuración desde appsettings.json
 builder.Configuration
@@ -16,12 +38,13 @@ builder.Services.AddSingleton(provider =>
 builder.Services.AddScoped<AlumnoRepository>();
 builder.Services.AddScoped<Alumnodomain>();
 
+
 builder.Services.AddScoped<clienteRepository>();
 builder.Services.AddScoped<clienteDomain>();
 
+
 builder.Services.AddScoped<DetallecompraDomain>();
 builder.Services.AddScoped<DetallecompraRepository>();
-
 
 
 builder.Services.AddScoped<proveedorrepository>();
@@ -35,8 +58,10 @@ builder.Services.AddScoped<EmpleadoDomain>();
 builder.Services.AddScoped<CompraRepository>();
 builder.Services.AddScoped<CompraDomain>();
 
+
 builder.Services.AddScoped<VentaRepository>();
 builder.Services.AddScoped<VentaDomain>();
+
 
 builder.Services.AddScoped<CategoriaRepository>();
 builder.Services.AddScoped<CategoriaDomain>();
@@ -48,8 +73,10 @@ builder.Services.AddScoped<MetodopagoDomain>();
 builder.Services.AddScoped<DetalleVentaRepository>();
 builder.Services.AddScoped<DetalleVentaDomain>();
 
+
 builder.Services.AddScoped<PagoRepository>();
 builder.Services.AddScoped<PagoDomain>();
+
 
 builder.Services.AddScoped<productodomain>();
 builder.Services.AddScoped<productorepository>();
@@ -70,7 +97,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
