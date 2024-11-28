@@ -1,0 +1,179 @@
+﻿@model IEnumerable<Detallecompra>
+@{
+    ViewData["Title"] = "Listado de Detalles de Compra";
+    Layout = "~/Views/Shared/_LayoutDashBoard.cshtml";
+}
+
+<h2>Listado de Detalles de Compra</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID Detalle</th>
+            <th>Compra</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio Unitario</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.niddetallecompra</td>
+                <td>@item.nidcompra</td>
+                <td>@item.nidproducto</td>
+                <td>@item.ncantidad</td>
+                <td>@item.npreciounitario</td>
+                <td>
+                    <button class="btn btn-warning"
+                            onclick="openEditModal(@item.niddetallecompra,
+                                                  @item.nidcompra,
+                                                  @item.nidproducto,
+                                                  @item.ncantidad,
+                                                  @item.npreciounitario)">
+                        Editar
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteDetalleCompra(@item.niddetallecompra)">Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button class="btn btn-primary" onclick="openModal()">Nuevo Detalle</button>
+
+<!-- Modal para Crear Detalle -->
+<div class="modal fade" id="newDetalleModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Nuevo Detalle de Compra</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="newDetalleForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="nidcompra">ID Compra</label>
+                        <input type="number" class="form-control" id="nidcompra" name="nidcompra" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nidproducto">ID Producto</label>
+                        <input type="number" class="form-control" id="nidproducto" name="nidproducto" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="ncantidad">Cantidad</label>
+                        <input type="number" class="form-control" id="ncantidad" name="ncantidad" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="npreciounitario">Precio Unitario</label>
+                        <input type="number" class="form-control" id="npreciounitario" name="npreciounitario" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="submitDetalle()">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Editar Detalle -->
+<div class="modal fade" id="editDetalleModal" tabindex="-1" role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalTitle">Editar Detalle de Compra</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editDetalleForm">
+                <input type="hidden" id="editId" />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="editNidcompra">ID Compra</label>
+                        <input type="number" class="form-control" id="editNidcompra" name="nidcompra" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editNidproducto">ID Producto</label>
+                        <input type="number" class="form-control" id="editNidproducto" name="nidproducto" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editNcantidad">Cantidad</label>
+                        <input type="number" class="form-control" id="editNcantidad" name="ncantidad" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editNpreciounitario">Precio Unitario</label>
+                        <input type="number" class="form-control" id="editNpreciounitario" name="npreciounitario" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="submitEditDetalle()">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openModal() {
+            $('#newDetalleModal').modal('show');
+        }
+
+        function openEditModal(id, nidcompra, nidproducto, ncantidad, npreciounitario) {
+            document.getElementById('editId').value = id;
+            document.getElementById('editNidcompra').value = nidcompra;
+            document.getElementById('editNidproducto').value = nidproducto;
+            document.getElementById('editNcantidad').value = ncantidad;
+            document.getElementById('editNpreciounitario').value = npreciounitario;
+            $('#editDetalleModal').modal('show');
+        }
+
+        function submitDetalle() {
+            const data = {
+                nidcompra: document.getElementById('nidcompra').value,
+                nidproducto: document.getElementById('nidproducto').value,
+                ncantidad: document.getElementById('ncantidad').value,
+                npreciounitario: document.getElementById('npreciounitario').value
+            };
+
+            fetch('/Detallecompra', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.ok ? location.reload() : alert('Error al crear el detalle de compra.'));
+        }
+
+        function submitEditDetalle() {
+            const data = {
+                niddetallecompra: document.getElementById('editId').value,
+                nidcompra: document.getElementById('editNidcompra').value,
+                nidproducto: document.getElementById('editNidproducto').value,
+                ncantidad: document.getElementById('editNcantidad').value,
+                npreciounitario: document.getElementById('editNpreciounitario').value
+            };
+
+            fetch('/detallecompra', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.ok ? location.reload() : alert('Error al actualizar el detalle de compra.'));
+        }
+
+        function deleteDetalleCompra(id) {
+            if (confirm("¿Estás seguro de que deseas eliminar este detalle de compra?")) {
+                fetch(`/Detallecompra/${id}`, { method: 'DELETE' })
+                    .then(response => response.ok ? location.reload() : alert('Error al eliminar el detalle de compra.'));
+            }
+        }
+    </script>
+}

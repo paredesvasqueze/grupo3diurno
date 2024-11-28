@@ -6,18 +6,18 @@ namespace CapaDomain
 {
     public class EmpleadoDomain
     {
-        private readonly EmpleadoRepository _empleadoRepository;
+        private readonly EmpleadoRepository _EmpleadoRepository;
 
         public EmpleadoDomain(EmpleadoRepository empleadoRepository)
         {
-            _empleadoRepository = empleadoRepository;
+            _EmpleadoRepository = empleadoRepository;
         }
 
         public IEnumerable<Empleado> ObtenerEmpleadoTodos()
         {
             try
             {
-                return _empleadoRepository.ObtenerEmpleadoTodos();
+                return _EmpleadoRepository.ObtenerEmpleadoTodos();
             }
             catch (Exception ex)
             {
@@ -29,7 +29,7 @@ namespace CapaDomain
         {
             try
             {
-                return _empleadoRepository.InsertarEmpleado(oEmpleado);
+                return _EmpleadoRepository.InsertarEmpleado(oEmpleado);
             }
             catch (Exception ex)
             {
@@ -41,7 +41,7 @@ namespace CapaDomain
         {
             try
             {
-                return _empleadoRepository.ActualizarEmpleado(oEmpleado);
+                return _EmpleadoRepository.ActualizarEmpleado(oEmpleado);
             }
             catch (Exception ex)
             {
@@ -53,7 +53,7 @@ namespace CapaDomain
         {
             try
             {
-                return _empleadoRepository.EliminarEmpleado(idEmpleado);
+                return _EmpleadoRepository.EliminarEmpleado(idEmpleado);
             }
             catch (Exception ex)
             {

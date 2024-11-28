@@ -1,0 +1,179 @@
+﻿@model IEnumerable<venta>
+@{
+    ViewData["Title"] = "Listado de Ventas";
+    Layout = "~/Views/Shared/_LayoutDashBoard.cshtml";
+}
+
+<h2>Listado de Ventas</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID Venta</th>
+            <th>Cliente</th>
+            <th>Empleado</th>
+            <th>Fecha Venta</th>
+            <th>Total</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.nidVenta</td>
+                <td>@item.nidcliente</td>
+                <td>@item.nidempleado</td>
+                <td>@item.dfechaventa.ToString("yyyy-MM-dd")</td>
+                <td>@item.ntotal.ToString("C")</td>
+                <td>
+                    <button class="btn btn-warning"
+                            onclick="openEditModal(@item.nidVenta,
+                                                  @item.nidcliente,
+                                                  @item.nidempleado,
+                                                  '@item.dfechaventa.ToString("yyyy-MM-dd")',
+                                                  @item.ntotal)">
+                        Editar
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteVenta(@item.nidVenta)">Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button class="btn btn-primary" onclick="openModal()">Nueva Venta</button>
+
+<!-- Modal para Crear Venta -->
+<div class="modal fade" id="newVentaModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Nueva Venta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="newVentaForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="idCliente">ID Cliente</label>
+                        <input type="number" class="form-control" id="idCliente" name="nidcliente" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="idEmpleado">ID Empleado</label>
+                        <input type="number" class="form-control" id="idEmpleado" name="nidempleado" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaVenta">Fecha Venta</label>
+                        <input type="date" class="form-control" id="fechaVenta" name="dfechaventa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="total">Total</label>
+                        <input type="number" class="form-control" id="total" name="ntotal" step="0.01" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="submitVenta()">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Editar Venta -->
+<div class="modal fade" id="editVentaModal" tabindex="-1" role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalTitle">Editar Venta</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editVentaForm">
+                <input type="hidden" id="editId" />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="editIdCliente">ID Cliente</label>
+                        <input type="number" class="form-control" id="editIdCliente" name="nidcliente" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editIdEmpleado">ID Empleado</label>
+                        <input type="number" class="form-control" id="editIdEmpleado" name="nidempleado" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editFechaVenta">Fecha Venta</label>
+                        <input type="date" class="form-control" id="editFechaVenta" name="dfechaventa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editTotal">Total</label>
+                        <input type="number" class="form-control" id="editTotal" name="ntotal" step="0.01" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="submitEditVenta()">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openModal() {
+            $('#newVentaModal').modal('show');
+        }
+
+        function openEditModal(id, idCliente, idEmpleado, fechaVenta, total) {
+            document.getElementById('editId').value = id;
+            document.getElementById('editIdCliente').value = idCliente || "";
+            document.getElementById('editIdEmpleado').value = idEmpleado || "";
+            document.getElementById('editFechaVenta').value = fechaVenta || "";
+            document.getElementById('editTotal').value = total || "";
+            $('#editVentaModal').modal('show');
+        }
+
+        function submitVenta() {
+            const data = {
+                nidcliente: document.getElementById('idCliente').value,
+                nidempleado: document.getElementById('idEmpleado').value,
+                dfechaventa: document.getElementById('fechaVenta').value,
+                ntotal: document.getElementById('total').value
+            };
+
+            fetch('/venta', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.ok ? location.reload() : alert('Error al crear la venta.'));
+        }
+
+        function submitEditVenta() {
+            const data = {
+                nidVenta: document.getElementById('editId').value,
+                nidcliente: document.getElementById('editIdCliente').value,
+                nidempleado: document.getElementById('editIdEmpleado').value,
+                dfechaventa: document.getElementById('editFechaVenta').value,
+                ntotal: document.getElementById('editTotal').value
+            };
+
+            fetch('/venta', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.ok ? location.reload() : alert('Error al actualizar la venta.'));
+        }
+
+        function deleteVenta(id) {
+            if (confirm("¿Estás seguro de que deseas eliminar esta venta?")) {
+                fetch(`/Venta/${id}`, { method: 'DELETE' })
+                    .then(response => response.ok ? location.reload() : alert('Error al eliminar la venta.'));
+            }
+        }
+    </script>
+}

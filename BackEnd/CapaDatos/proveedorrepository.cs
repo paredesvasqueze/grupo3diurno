@@ -72,16 +72,24 @@ namespace CapaDatos
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
             }
         }
-        public int Eliminarproveedor(proveedor oproveedor)
+        public int EliminarProveedor(int idProveedor) // Recibiendo el ID del Proveedor
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
 
-                var query = "USP_Eliminarproveedor";
+                var query = "USP_Eliminarproveedor"; // Asegúrate de que este procedimiento almacenado exista
                 var param = new DynamicParameters();
-                param.Add("@nidProveedor", oproveedor.nidProveedor);
-                return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
+                param.Add("@nidproveedor", idProveedor); // Usando el ID
+
+                try
+                {
+                    return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al eliminar Proveedor: " + ex.Message);
+                }
             }
         }
     }

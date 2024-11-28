@@ -70,19 +70,25 @@ namespace CapaDatos
 
         }
 
-        public int EliminarCategoria(Categoria oCategoria)
+        public int EliminarCategoria(int idCategoria) // Recibiendo el ID del Categoria
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
 
-                var query = "USP_Eliminar_categoria";
+                var query = "USP_Eliminar_Categoria"; // Asegúrate de que este procedimiento almacenado exista
                 var param = new DynamicParameters();
-                param.Add("@nidcategoria", oCategoria.nidcategoria);
-                return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
+                param.Add("@nidCategoria", idCategoria); // Usando el ID
+
+                try
+                {
+                    return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al eliminar Categoria: " + ex.Message);
+                }
             }
-
-
         }
     }
 }

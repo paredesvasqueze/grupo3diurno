@@ -26,6 +26,24 @@ namespace CapaDatos
             }
         }
 
+        public producto GetProductoId(int nIdProducto)
+        {
+            var Productos = new List<producto>();
+
+            using (var connection = _conexionSingleton.GetConnection())
+            {
+                connection.Open();
+                producto Item = new producto();
+                var query = "GetProductoById";
+                var param = new DynamicParameters();
+                param.Add("@nIdProducto", nIdProducto);
+                //param.Add("@nConstGrupo", nConstGrupo, dbType: DbType.Int32);
+                Item = SqlMapper.QueryFirstOrDefault<producto>(connection, query, param, commandType: CommandType.StoredProcedure);
+                return Item;
+
+            }
+        }
+
         // Insertar un nuevo producto
         public int InsertarProducto(producto oProducto)
         {

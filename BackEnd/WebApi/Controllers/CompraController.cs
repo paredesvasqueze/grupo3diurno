@@ -38,10 +38,11 @@ namespace WebApi.Controllers
             return Ok(id);
         }
 
-        [HttpDelete("EliminarCompra")]
-        public IActionResult EliminarCompra(Compra oCompra)
+        [HttpDelete("EliminarCompra/{nidcompra}")]
+        public IActionResult EliminarCompra(Int32 nidcompra)
         {
-            var id = _CompraDomain.EliminarCompra(oCompra);
+            Compra Compra = new Compra() { nidcompra = nidcompra };
+            var id = _CompraDomain.EliminarCompra(Compra);
             return Ok(id);
         }
     }

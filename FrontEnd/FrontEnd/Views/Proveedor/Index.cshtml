@@ -1,0 +1,191 @@
+﻿@model IEnumerable<proveedor>
+@{
+    ViewData["Title"] = "Listado de Proveedores";
+    Layout = "~/Views/Shared/_LayoutDashBoard.cshtml";
+}
+
+<h2>Listado de Proveedores</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID Proveedor</th>
+            <th>Nombre</th>
+            <th>Contacto</th>
+            <th>Teléfono</th>
+            <th>Email</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.nidProveedor</td>
+                <td>@item.cnombreProveedor</td>
+                <td>@item.ccontacto</td>
+                <td>@item.ctelefono</td>
+                <td>@item.cemail</td>
+                <td>
+                    <button class="btn btn-warning"
+                            onclick="openEditModal(@item.nidProveedor,
+                                                  '@item.cnombreProveedor',
+                                                  '@item.ccontacto',
+                                                  '@item.ctelefono',
+                                                  '@item.cemail')">
+                        Editar
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteProveedor(@item.nidProveedor)">Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button class="btn btn-primary" onclick="openModal()">Nuevo Proveedor</button>
+
+<!-- Modal para Crear Proveedor -->
+<div class="modal fade" id="newProveedorModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Nuevo Proveedor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="newProveedorForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="nombreProveedor">Nombre</label>
+                        <input type="text" class="form-control" id="nombreProveedor" name="cnombreProveedor" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="contacto">Contacto</label>
+                        <input type="text" class="form-control" id="contacto" name="ccontacto">
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">Teléfono</label>
+                        <input type="text" class="form-control" id="telefono" name="ctelefono">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="cemail">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="submitProveedor()">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Editar Proveedor -->
+<div class="modal fade" id="editProveedorModal" tabindex="-1" role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalTitle">Editar Proveedor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editProveedorForm">
+                <input type="hidden" id="editId" />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="editNombreProveedor">Nombre</label>
+                        <input type="text" class="form-control" id="editNombreProveedor" name="cnombreProveedor" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editContacto">Contacto</label>
+                        <input type="text" class="form-control" id="editContacto" name="ccontacto">
+                    </div>
+                    <div class="form-group">
+                        <label for="editTelefono">Teléfono</label>
+                        <input type="text" class="form-control" id="editTelefono" name="ctelefono">
+                    </div>
+                    <div class="form-group">
+                        <label for="editEmail">Email</label>
+                        <input type="email" class="form-control" id="editEmail" name="cemail">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="submitEditProveedor()">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openModal() {
+            $('#newProveedorModal').modal('show');
+        }
+
+        function openEditModal(id, nombreProveedor, contacto, telefono, email) {
+            document.getElementById('editId').value = id;
+            document.getElementById('editNombreProveedor').value = nombreProveedor || "";
+            document.getElementById('editContacto').value = contacto || "";
+            document.getElementById('editTelefono').value = telefono || "";
+            document.getElementById('editEmail').value = email || "";
+            $('#editProveedorModal').modal('show');
+        }
+
+        function submitProveedor() {
+            const nombre = document.getElementById('nombreProveedor').value.trim();
+            if (!nombre) {
+                alert("El campo 'Nombre' es obligatorio.");
+                return;
+            }
+
+            const data = {
+                cnombreProveedor: nombre,
+                ccontacto: document.getElementById('contacto').value.trim() || null,
+                ctelefono: document.getElementById('telefono').value.trim() || null,
+                cemail: document.getElementById('email').value.trim() || null
+            };
+
+            fetch('/Proveedor', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.ok ? location.reload() : alert('Error al crear el proveedor.'));
+        }
+
+        function submitEditProveedor() {
+            const nombre = document.getElementById('editNombreProveedor').value.trim();
+            if (!nombre) {
+                alert("El campo 'Nombre' es obligatorio.");
+                return;
+            }
+
+            const data = {
+                nidProveedor: document.getElementById('editId').value,
+                cnombreProveedor: nombre,
+                ccontacto: document.getElementById('editContacto').value.trim() || null,
+                ctelefono: document.getElementById('editTelefono').value.trim() || null,
+                cemail: document.getElementById('editEmail').value.trim() || null
+            };
+
+            fetch('/Proveedor', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.ok ? location.reload() : alert('Error al actualizar el proveedor.'));
+        }
+
+        function deleteProveedor(id) {
+            if (confirm("¿Estás seguro de que deseas eliminar este proveedor?")) {
+                fetch(`/Proveedor/${id}`, { method: 'DELETE' })
+                    .then(response => response.ok ? location.reload() : alert('Error al eliminar el proveedor.'));
+            }
+        }
+    </script>
+}

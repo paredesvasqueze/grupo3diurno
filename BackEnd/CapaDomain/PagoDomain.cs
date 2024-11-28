@@ -27,6 +27,20 @@ namespace CapaDomain
            
         }
 
+        public Pago GetPagoId(int nidpago)
+        {
+            try
+            {
+                return _PagoRepository.GetPagoId(nidpago);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
+
         public int InsertarPago(Pago oPago)
         {
             try

@@ -14,6 +14,7 @@ namespace CapaDatos
     public class CompraRepository
     {
         private readonly ConexionSingleton _conexionSingleton;
+        private string _connectionString;
 
         // Constructor que recibe el singleton de conexión
         public CompraRepository(ConexionSingleton conexionSingleton)

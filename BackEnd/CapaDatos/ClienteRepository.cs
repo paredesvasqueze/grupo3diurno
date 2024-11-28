@@ -11,35 +11,35 @@ using Dapper;
 
 namespace CapaDatos
 {
-    public class clienteRepository
+    public class ClienteRepository
     {
         private readonly ConexionSingleton _conexionSingleton;
 
         // Constructor que recibe el singleton de conexión
-        public clienteRepository(ConexionSingleton conexionSingleton)
+        public ClienteRepository(ConexionSingleton conexionSingleton)
         {
             _conexionSingleton = conexionSingleton;
         }
 
         // Método para obtener una lista de clientes
-        public IEnumerable<cliente> ObtenerclienteTodos()
+        public IEnumerable<Cliente> ObtenerclienteTodos()
         {
-            var clientes = new List<cliente>();
+            var clientes = new List<Cliente>();
 
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
-                IEnumerable<cliente> lstFound = new List<cliente>();
+                IEnumerable<Cliente> lstFound = new List<Cliente>();
                 var query = "USP_GET_cliente_Todos";
                 var param = new DynamicParameters();
                 //param.Add("@nConstGrupo", nConstGrupo, dbType: DbType.Int32);
-                lstFound = SqlMapper.Query<cliente>(connection, query, param, commandType: CommandType.StoredProcedure);
+                lstFound = SqlMapper.Query<Cliente>(connection, query, param, commandType: CommandType.StoredProcedure);
                 return lstFound;              
                 
             }
         }
 
-        public int Insertarcliente(cliente ocliente)
+        public int Insertarcliente(Cliente ocliente)
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
@@ -58,8 +58,7 @@ namespace CapaDatos
 
         }
 
-
-        public int actualizarcliente(cliente ocliente)
+        public int Actualizarcliente(Cliente ocliente)
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
@@ -78,20 +77,25 @@ namespace CapaDatos
 
         }
 
-
-        public int eliminarcliente(cliente ocliente)
+        public int eliminarcliente(int nidcliente) // Recibiendo el ID del Proveedor
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
 
-                var query = "USP_Eliminar_cliente";
+                var query = "USP_Eliminar_cliente"; // Asegúrate de que este procedimiento almacenado exista
                 var param = new DynamicParameters();
-                param.Add("@nidcliente", ocliente.nidcliente);
-                return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
+                param.Add("@nidcliente", nidcliente); // Usando el ID
+
+                try
+                {
+                    return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al eliminar Cliente: " + ex.Message);
+                }
             }
-
         }
-
     }
 }

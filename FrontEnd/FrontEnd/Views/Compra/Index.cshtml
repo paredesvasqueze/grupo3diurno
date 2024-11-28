@@ -1,0 +1,165 @@
+﻿@model IEnumerable<Compra>
+@{
+    ViewData["Title"] = "Listado de Compras";
+    Layout = "~/Views/Shared/_LayoutDashBoard.cshtml";
+}
+
+<h2>Listado de Compras</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID Compra</th>
+            <th>Proveedor</th>
+            <th>Fecha de Compra</th>
+            <th>Total</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.nidcompra</td>
+                <td>@item.nidproveedor</td>
+                <td>@item.dfechacompra.ToString("dd/MM/yyyy")</td>
+                <td>@item.ntotal.ToString("C")</td>
+                <td>
+                    <button class="btn btn-warning"
+                            onclick="openEditModal(@item.nidcompra,
+                                                  @item.nidproveedor,
+                                                  '@item.dfechacompra.ToString("yyyy-MM-dd")',
+                                                  @item.ntotal)">
+                        Editar
+                    </button>
+                    <button class="btn btn-danger" onclick="deleteCompra(@item.nidcompra)">Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button class="btn btn-primary" onclick="openModal()">Nueva Compra</button>
+
+<!-- Modal para Crear Compra -->
+<div class="modal fade" id="newCompraModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Nueva Compra</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="newCompraForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="proveedor">ID Proveedor</label>
+                        <input type="number" class="form-control" id="proveedor" name="nidproveedor" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaCompra">Fecha de Compra</label>
+                        <input type="date" class="form-control" id="fechaCompra" name="dfechacompra" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="total">Total</label>
+                        <input type="number" step="0.01" class="form-control" id="total" name="ntotal" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="submitCompra()">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Editar Compra -->
+<div class="modal fade" id="editCompraModal" tabindex="-1" role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalTitle">Editar Compra</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editCompraForm">
+                <input type="hidden" id="editId" />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="editProveedor">ID Proveedor</label>
+                        <input type="number" class="form-control" id="editProveedor" name="nidproveedor" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editFechaCompra">Fecha de Compra</label>
+                        <input type="date" class="form-control" id="editFechaCompra" name="dfechacompra" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editTotal">Total</label>
+                        <input type="number" step="0.01" class="form-control" id="editTotal" name="ntotal" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="submitEditCompra()">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openModal() {
+            $('#newCompraModal').modal('show');
+        }
+
+        function openEditModal(id, proveedor, fechaCompra, total) {
+            document.getElementById('editId').value = id;
+            document.getElementById('editProveedor').value = proveedor;
+            document.getElementById('editFechaCompra').value = fechaCompra;
+            document.getElementById('editTotal').value = total;
+            $('#editCompraModal').modal('show');
+        }
+
+        function submitCompra() {
+            const data = {
+                nidproveedor: document.getElementById('proveedor').value,
+                dfechacompra: document.getElementById('fechaCompra').value,
+                ntotal: document.getElementById('total').value
+            };
+
+            fetch('/Compra', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.ok ? location.reload() : alert('Error al crear la compra.'));
+        }
+
+        function submitEditCompra() {
+            const data = {
+                nidcompra: document.getElementById('editId').value,
+                nidproveedor: document.getElementById('editProveedor').value,
+                dfechacompra: document.getElementById('editFechaCompra').value,
+                ntotal: document.getElementById('editTotal').value
+            };
+
+            fetch('/Compra', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.ok ? location.reload() : alert('Error al actualizar la compra.'));
+        }
+
+        function deleteCompra(id) {
+            if (confirm("¿Estás seguro de que deseas eliminar esta compra?")) {
+                fetch(`/Compra/${id}`, { method: 'DELETE' })
+                    .then(response => response.ok ? location.reload() : alert('Error al eliminar la compra.'));
+            }
+        }
+    </script>
+}

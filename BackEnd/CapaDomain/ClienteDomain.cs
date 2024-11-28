@@ -3,17 +3,17 @@ using CapaDatos;
 
 namespace CapaDomain
 {
-    public class clienteDomain
+    public class ClienteDomain
     {
-        private readonly clienteRepository _clienteRepository;
+        private readonly ClienteRepository _clienteRepository;
 
-        public clienteDomain(clienteRepository clienteRepository)
+        public ClienteDomain(ClienteRepository clienteRepository)
         {
            
                 _clienteRepository = clienteRepository;     
         }
 
-        public IEnumerable<cliente> ObtenerclienteTodos()
+        public IEnumerable<Cliente> ObtenerclienteTodos()
         {
             try
             {
@@ -27,7 +27,7 @@ namespace CapaDomain
            
         }
 
-        public int Insertarcliente(cliente ocliente)
+        public int Insertarcliente(Cliente ocliente)
         {
             try
             {
@@ -41,11 +41,11 @@ namespace CapaDomain
         }
 
 
-        public int actualizarcliente(cliente ocliente)
+        public int Actualizarcliente(Cliente ocliente)
         {
             try
             {
-                return _clienteRepository.actualizarcliente(ocliente);
+                return _clienteRepository.Actualizarcliente(ocliente);
             }
             catch (Exception)
             {
@@ -54,11 +54,11 @@ namespace CapaDomain
 
         }
 
-        public int eliminarcliente(cliente ocliente)
+        public int eliminarcliente(Cliente ocliente)
         {
             try
             {
-                return _clienteRepository.eliminarcliente(ocliente);
+                return _clienteRepository.eliminarcliente(ocliente.nidcliente);
             }
             catch (Exception)
             {
@@ -66,9 +66,5 @@ namespace CapaDomain
             }
 
         }
-
-
-
-
     }
 }

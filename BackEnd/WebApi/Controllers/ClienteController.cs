@@ -10,9 +10,9 @@ namespace WebApi.Controllers
     [Route("[controller]")]
     public class ClienteController : ControllerBase
     {
-        private readonly clienteDomain _clienteDomain;
+        private readonly ClienteDomain _clienteDomain;
 
-        public ClienteController(clienteDomain clienteDomain)
+        public ClienteController(ClienteDomain clienteDomain)
         {
             _clienteDomain = clienteDomain;
         }
@@ -24,27 +24,26 @@ namespace WebApi.Controllers
             return Ok(clientes);
         }
 
+        [HttpPut("actualizarcliente")]
+        public IActionResult Actualizarcliente(Cliente ocliente)
+        {
+            var id = _clienteDomain.Actualizarcliente(ocliente);
+            return Ok(id);
+        }
+
         [HttpPost("Insertarcliente")]
-        public IActionResult Insertarcliente(cliente ocliente)
+        public IActionResult Insertarcliente(Cliente ocliente)
         {
             var id = _clienteDomain.Insertarcliente(ocliente);
             return Ok(id);
         }
 
-
-        [HttpPut("actualizarcliente")]
-        public IActionResult actualizarcliente(cliente ocliente)
+        [HttpDelete("eliminarcliente/{nIdcliente}")]
+        public IActionResult Eliminarcliente(Int32 nIdcliente)
         {
-            var id = _clienteDomain.actualizarcliente(ocliente);
+            Cliente cliente = new Cliente() { nidcliente = nIdcliente };
+            var id = _clienteDomain.eliminarcliente(cliente);
             return Ok(id);
         }
-
-        [HttpDelete("eliminarcliente")]
-        public IActionResult eliminarcliente(cliente ocliente)
-        {
-            var id = _clienteDomain.eliminarcliente(ocliente);
-            return Ok(id);
-        }
-
     }
 }

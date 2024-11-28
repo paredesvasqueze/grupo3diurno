@@ -68,19 +68,25 @@ namespace CapaDatos
 
 
         }
-        public int EliminarMetodopago(Metodopago oMetodopago)
+        public int EliminarMetodopago(int nidmetodopago) 
         {
             using (var connection = _conexionSingleton.GetConnection())
             {
                 connection.Open();
 
-                var query = "EliminarMetodopago";
+                var query = "EliminarMetodopago"; 
                 var param = new DynamicParameters();
-                param.Add("@nidmetodopago", oMetodopago.nidmetodopago);
-                return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
+                param.Add("@nidmetodopago", nidmetodopago); 
+
+                try
+                {
+                    return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Error al eliminar Metodo Pago: " + ex.Message);
+                }
             }
-
-
         }
 
     }

@@ -10,38 +10,38 @@ namespace WebApi.Controllers
     [Route("[controller]")]
     public class EmpleadoController : ControllerBase
     {
-        private readonly EmpleadoDomain _empleadoDomain;
+        private readonly EmpleadoDomain _EmpleadoDomain;
 
-        public EmpleadoController(EmpleadoDomain empleadoDomain)
+        public EmpleadoController(EmpleadoDomain EmpleadoDomain)
         {
-            _empleadoDomain = empleadoDomain;
+            _EmpleadoDomain = EmpleadoDomain;
         }
 
         [HttpGet("ObtenerEmpleadoTodos")]
         public IActionResult ObtenerEmpleadoTodos()
         {
-            var empleados = _empleadoDomain.ObtenerEmpleadoTodos();
+            var empleados = _EmpleadoDomain.ObtenerEmpleadoTodos();
             return Ok(empleados);
         }
 
         [HttpPost("InsertarEmpleado")]
         public IActionResult InsertarEmpleado([FromBody] Empleado oEmpleado)
         {
-            var id = _empleadoDomain.InsertarEmpleado(oEmpleado);
+            var id = _EmpleadoDomain.InsertarEmpleado(oEmpleado);
             return Ok(id);
         }
 
         [HttpPut("ActualizarEmpleado")]
         public IActionResult ActualizarEmpleado([FromBody] Empleado oEmpleado)
         {
-            var id = _empleadoDomain.ActualizarEmpleado(oEmpleado);
+            var id = _EmpleadoDomain.ActualizarEmpleado(oEmpleado);
             return Ok(id);
         }
 
         [HttpDelete("EliminarEmpleado/{id}")]
         public IActionResult EliminarEmpleado(int id)
         {
-            var resultado = _empleadoDomain.EliminarEmpleado(id);
+            var resultado = _EmpleadoDomain.EliminarEmpleado(id);
             return Ok(resultado);
         }
     }

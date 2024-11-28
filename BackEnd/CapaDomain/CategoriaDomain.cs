@@ -52,7 +52,7 @@ namespace CapaDomain
             }
 
         }
-        public int EliminarCategoria(Categoria oCategoria)
+        public int EliminarCategoria(Int32 oCategoria)
         {
             try
             {

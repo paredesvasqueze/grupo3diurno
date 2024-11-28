@@ -38,10 +38,11 @@ namespace WebApi.Controllers
             return Ok(id);
         }
 
-        [HttpDelete("EliminarMetodopago")]
-        public IActionResult EliminarMetodopago(Metodopago oMetodopago)
+        [HttpDelete("EliminarMetodopago/{nidmetodopago}")]
+        public IActionResult EliminarMetodopago(Int32 nidmetodopago)
         {
-            var id = _MetodopagoDomain.EliminarMetodopago(oMetodopago);
+            Metodopago Metodopago = new Metodopago() { nidmetodopago = nidmetodopago };
+            var id = _MetodopagoDomain.EliminarMetodopago(Metodopago);
             return Ok(id);
         }
     }

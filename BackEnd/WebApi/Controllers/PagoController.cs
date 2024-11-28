@@ -21,6 +21,12 @@ namespace WebApi.Controllers
             var Pagos = _PagoDomain.ObtenerPagoTodos();
             return Ok(Pagos);
         }
+        [HttpGet("GetPagoId/{nIdPago}")]
+        public IActionResult GetPagoId(int nidpago)
+        {
+            var pago = _PagoDomain.GetPagoId(nidpago);
+            return Ok(pago);
+        }
 
         [HttpPost("InsertarPago")]
         public IActionResult InsertarPago(Pago oPago)
@@ -37,10 +43,11 @@ namespace WebApi.Controllers
             return Ok(id);
         }
 
-        [HttpDelete("EliminarPago")]
-        public IActionResult EliminarPago(Pago oPago)
+        [HttpDelete("EliminarPago/{nidpago}")]
+        public IActionResult EliminarPago(Int32 nidpago)
         {
-            var id = _PagoDomain.EliminarPago(oPago);
+            Pago Pago = new Pago() { nidpago = nidpago };
+            var id = _PagoDomain.EliminarPago(Pago);
             return Ok(id);
         }
 

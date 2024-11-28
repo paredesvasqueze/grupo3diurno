@@ -1,0 +1,189 @@
+﻿@model IEnumerable<Pago>
+@{
+    ViewData["Title"] = "Listado de Pagos";
+    Layout = "~/Views/Shared/_LayoutDashBoard.cshtml";
+}
+
+<h2>Listado de Pagos</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID Pago</th>
+            <th>Venta</th>
+            <th>Fecha Pago</th>
+            <th>Monto</th>
+            <th>Método de Pago</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.nidpago</td>
+                <td>@item.cventa</td>
+                <td>@item.dfechapago.ToString("yyyy-MM-dd")</td>
+                <td>@item.nmonto.ToString("C")</td>
+                <td>@item.cmetodopago</td>
+                <td>
+                    <button class="btn btn-warning"
+                            onclick="openEditModal(@item.nidpago,
+                                                  '@item.cventa',
+                                                  '@item.dfechapago.ToString("yyyy-MM-dd")',
+                                                  @item.nmonto,
+                                                  '@item.nidmetodopago')">
+                        Editar
+                    </button>
+                    <button class="btn btn-danger" onclick="deletePago(@item.nidpago)">Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button class="btn btn-primary" onclick="openModal()">Nuevo Pago</button>
+
+<!-- Modal para Crear Pago -->
+<div class="modal fade" id="newPagoModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Nuevo Pago</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="newPagoForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="idVenta">ID Venta</label>
+                        <input type="text" class="form-control" id="idVenta" name="nidventa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaPago">Fecha de Pago</label>
+                        <input type="date" class="form-control" id="fechaPago" name="dfechapago" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="monto">Monto</label>
+                        <input type="number" class="form-control" id="monto" name="nmonto" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="metodoPago">Método de Pago</label>
+                        <select id="nidmetodopago" name="nidmetodopago" class="form-control" required>
+                            <option value="">Seleccione un Método de Pago</option>
+                            @foreach (var metodopago in ViewBag.Metodopago as IEnumerable<Metodopago>)
+                            {
+                                <option value="@metodopago.nidmetodopago">@metodopago.cmetodopago</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="submitPago()">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Editar Pago -->
+<div class="modal fade" id="editPagoModal" tabindex="-1" role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalTitle">Editar Pago</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editPagoForm">
+                <input type="hidden" id="editId" />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="editIdVenta">ID Venta</label>
+                        <input type="text" class="form-control" id="editIdVenta" name="nidventa" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editFechaPago">Fecha de Pago</label>
+                        <input type="date" class="form-control" id="editFechaPago" name="dfechapago" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editMonto">Monto</label>
+                        <input type="number" class="form-control" id="editMonto" name="nmonto" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editMetodoPago">Método de Pago</label>
+                        <select id="editMetodoPago" name="nidmetodopago" class="form-control" required>
+                            <option value="">Seleccione un Método de Pago</option>
+                            @foreach (var metodopago in ViewBag.Metodopago as IEnumerable<Metodopago>)
+                            {
+                                <option value="@metodopago.nidmetodopago">@metodopago.cmetodopago</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="submitEditPago()">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openModal() {
+            $('#newPagoModal').modal('show');
+        }
+
+        function openEditModal(id, idVenta, fechaPago, monto, metodoPago) {
+            document.getElementById('editId').value = id;
+            document.getElementById('editIdVenta').value = idVenta;
+            document.getElementById('editFechaPago').value = fechaPago;
+            document.getElementById('editMonto').value = monto;
+            document.getElementById('editMetodoPago').value = metodoPago;
+            $('#editPagoModal').modal('show');
+        }
+
+        function submitPago() {
+            const data = {
+                nidventa: document.getElementById('idVenta').value.trim(),
+                dfechapago: document.getElementById('fechaPago').value,
+                nmonto: parseFloat(document.getElementById('monto').value),
+                nidmetodopago: document.getElementById('nidmetodopago').value.trim()
+            };
+
+            fetch('/Pago', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).then(response => response.ok ? location.reload() : alert('Error al crear el pago.'));
+        }
+
+        function submitEditPago() {
+            const data = {
+                nidpago: document.getElementById('editId').value,
+                nidventa: document.getElementById('editIdVenta').value.trim(),
+                dfechapago: document.getElementById('editFechaPago').value,
+                nmonto: parseFloat(document.getElementById('editMonto').value),
+                nidmetodopago: document.getElementById('editMetodoPago').value.trim()
+            };
+
+            fetch('/Pago', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).then(response => response.ok ? location.reload() : alert('Error al actualizar el pago.'));
+        }
+
+        function deletePago(id) {
+            if (confirm("¿Estás seguro de que deseas eliminar este pago?")) {
+                fetch(`/Pago/${id}`, { method: 'DELETE' })
+                    .then(response => response.ok ? location.reload() : alert('Error al eliminar el pago.'));
+            }
+        }
+    </script>
+}

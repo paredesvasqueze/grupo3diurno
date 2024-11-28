@@ -36,10 +36,11 @@ namespace WebApi.Controllers
             var id = _proveedorDomain.Insertarproveedor(oproveedor);
             return Ok(id);
         }
-        [HttpDelete("Eliminarproveedor")]
-        public IActionResult Eliminarproveedor(proveedor oproveedor)
+        [HttpDelete("Eliminarproveedor/{nIdproveedor}")]
+        public IActionResult Eliminarproveedor(Int32 nIdproveedor)
         {
-            var id = _proveedorDomain.Eliminarproveedor(oproveedor);
+            proveedor proveedor = new proveedor() { nidProveedor = nIdproveedor };
+            var id = _proveedorDomain.Eliminarproveedor(proveedor);
             return Ok(id);
         }
     }

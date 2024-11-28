@@ -56,7 +56,7 @@ namespace CapaDomain
         {
             try
             {
-                return _MetodopagoRepository.EliminarMetodopago(oMetodopago);
+                return _MetodopagoRepository.EliminarMetodopago(oMetodopago.nidmetodopago);
             }
             catch (Exception)
             {

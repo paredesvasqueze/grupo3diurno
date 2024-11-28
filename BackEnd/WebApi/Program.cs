@@ -39,8 +39,8 @@ builder.Services.AddScoped<AlumnoRepository>();
 builder.Services.AddScoped<Alumnodomain>();
 
 
-builder.Services.AddScoped<clienteRepository>();
-builder.Services.AddScoped<clienteDomain>();
+builder.Services.AddScoped<ClienteRepository>();
+builder.Services.AddScoped<ClienteDomain>();
 
 
 builder.Services.AddScoped<DetallecompraDomain>();

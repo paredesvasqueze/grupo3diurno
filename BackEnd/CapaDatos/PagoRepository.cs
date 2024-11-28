@@ -39,6 +39,24 @@ namespace CapaDatos
             }
         }
 
+        public Pago GetPagoId(int nIdPago)
+        {
+            var Pagos = new List<Pago>();
+
+            using (var connection = _conexionSingleton.GetConnection())
+            {
+                connection.Open();
+                Pago Item = new Pago();
+                var query = "GetPagoById";
+                var param = new DynamicParameters();
+                param.Add("@nidPago", nIdPago);
+                //param.Add("@nConstGrupo", nConstGrupo, dbType: DbType.Int32);
+                Item = SqlMapper.QueryFirstOrDefault<Pago>(connection, query, param, commandType: CommandType.StoredProcedure);
+                return Item;
+
+            }
+        }
+
         public int InsertarPago(Pago oPago)
         {
             using (var connection = _conexionSingleton.GetConnection())
@@ -73,7 +91,6 @@ namespace CapaDatos
                 param.Add("@nidmetodopago", oPago.nidmetodopago);
                 return (int)SqlMapper.ExecuteScalar(connection, query, param, commandType: CommandType.StoredProcedure);
             }
-
         }
 
 

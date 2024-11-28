@@ -24,25 +24,33 @@ namespace WebApi.Controllers
             return Ok(productos);
         }
 
+        [HttpGet("GetProductoId/{nIdProducto}")]
+        public IActionResult GetProductoId(int nIdProducto)
+        {
+            var ordenesCompra = _productoDomain.GetProductoId(nIdProducto);
+            return Ok(ordenesCompra);
+        }
+
         [HttpPost("InsertarProducto")]
-        public IActionResult InsertarProducto([FromBody] producto oProducto)  // Cambiado a producto
+        public IActionResult InsertarProducto([FromBody] producto oProducto)
         {
             var id = _productoDomain.InsertarProducto(oProducto);
             return Ok(id);
         }
 
         [HttpPut("ActualizarProducto")]
-        public IActionResult ActualizarProducto([FromBody] producto oProducto)  // Cambiado a producto
+        public IActionResult ActualizarProducto([FromBody] producto oProducto)
         {
             var id = _productoDomain.ActualizarProducto(oProducto);
             return Ok(id);
         }
 
-        [HttpDelete("EliminarProducto")]
-        public IActionResult EliminarProducto(int id)
+        [HttpDelete("EliminarProducto/{nidproducto}")]
+        public IActionResult EliminarProducto(Int32 nidproducto)
         {
-            var resultado = _productoDomain.EliminarProducto(id);
-            return Ok(resultado);
+            //producto Producto = new producto() { nidproducto = nidproducto};
+            var id = _productoDomain.EliminarProducto(nidproducto);
+            return Ok(id);
         }
     }
 }

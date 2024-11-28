@@ -1,0 +1,157 @@
+﻿@model IEnumerable<Metodopago>
+@{
+    ViewData["Title"] = "Listado de Métodos de Pago";
+    Layout = "~/Views/Shared/_LayoutDashBoard.cshtml";
+}
+
+<h2>Listado de Métodos de Pago</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID Método</th>
+            <th>Método de Pago</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.nidmetodopago</td>
+                <td>@item.cmetodopago</td>
+                <td>
+                    <button class="btn btn-warning" onclick="openEditModal(@item.nidmetodopago, '@item.cmetodopago')">Editar</button>
+                    <button class="btn btn-danger" onclick="deletePaymentMethod(@item.nidmetodopago)">Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button class="btn btn-primary" onclick="openModal()">Nuevo</button>
+
+<!-- Modal para Crear Método de Pago -->
+<div class="modal fade" id="newPaymentMethodModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Nuevo Método de Pago</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="newPaymentMethodForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="nombreMetodo">Método de Pago</label>
+                        <input type="text" class="form-control" id="nombreMetodo" name="cmetodopago" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="submitPaymentMethod()">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Editar Método de Pago -->
+<div class="modal fade" id="editPaymentMethodModal" tabindex="-1" role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalTitle">Editar Método de Pago</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="editPaymentMethodForm">
+                <input type="hidden" id="editId" />
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="editNombreMetodo">Método de Pago</label>
+                        <input type="text" class="form-control" id="editNombreMetodo" name="cmetodopago" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="submitEditPaymentMethod()">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openModal() {
+            $('#newPaymentMethodModal').modal('show');
+        }
+
+        function openEditModal(id, metodo) {
+            document.getElementById('editId').value = id;
+            document.getElementById('editNombreMetodo').value = metodo;
+            $('#editPaymentMethodModal').modal('show');
+        }
+
+        function submitPaymentMethod() {
+            const data = {
+                cmetodopago: document.getElementById('nombreMetodo').value
+            };
+
+            fetch('/Metodopago', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        alert('Error al crear el método de pago.');
+                    }
+                });
+        }
+
+        function submitEditPaymentMethod() {
+            const data = {
+                nidmetodopago: document.getElementById('editId').value,
+                cmetodopago: document.getElementById('editNombreMetodo').value
+            };
+
+            fetch('/Metodopago', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        alert('Error al actualizar el método de pago.');
+                    }
+                });
+        }
+
+        function deletePaymentMethod(id) {
+            if (confirm("¿Estás seguro de que deseas eliminar este método de pago?")) {
+                fetch(`/Metodopago/${id}`, {
+                    method: 'DELETE'
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            location.reload();
+                        } else {
+                            alert('Error al eliminar el método de pago.');
+                        }
+                    });
+            }
+        }
+    </script>
+}

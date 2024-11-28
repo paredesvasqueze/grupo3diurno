@@ -36,10 +36,11 @@ namespace WebApi.Controllers
             var id = _ventaDomain.Insertarventa(oventa);
             return Ok(id);
         }
-        [HttpDelete("Eliminarventa")]
-        public IActionResult Eliminarventa(venta oventa)
+        [HttpDelete("Eliminarventa/{nidVenta}")]
+        public IActionResult Eliminarventa(Int32 nidVenta)
         {
-            var id = _ventaDomain.Eliminarventa(oventa);
+            venta venta = new venta() { nidVenta = nidVenta };
+            var id = _ventaDomain.Eliminarventa(venta);
             return Ok(id);
         }
     }

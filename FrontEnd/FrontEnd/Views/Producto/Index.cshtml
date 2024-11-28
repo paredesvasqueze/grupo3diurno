@@ -1,0 +1,168 @@
+﻿@model IEnumerable<producto>
+@{
+    ViewData["Title"] = "Productos";
+    Layout = "~/Views/Shared/_LayoutDashBoard.cshtml";
+}
+
+<h2>Listado de Productos</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID Producto</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio Unitario</th>
+            <th>Stock</th>
+            <th>Categoría</th>
+            <th>Fecha de Registro</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.nidproducto</td>
+                <td>@item.cnombre</td>
+                <td>@item.cdescripcion</td>
+                <td>@item.npreciounitario</td>
+                <td>@item.nstock</td>
+                <td>@item.nidcategoria</td>
+                <td>@item.dfecharegistro.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <button class="btn btn-primary" onclick="openEditModal(@item.nidproducto)">Editar</button>
+                    <button class="btn btn-danger" onclick="deleteProducto(@item.nidproducto)">Eliminar</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<button class="btn btn-success" onclick="openCreateModal()">Nuevo Producto</button>
+
+<!-- Modal para Crear/Editar Producto -->
+<div class="modal fade" id="productoModal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Producto</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="productoForm">
+                <div class="modal-body">
+                    <input type="hidden" id="nidproducto" name="nidproducto" value="0" />
+                    <div class="form-group">
+                        <label for="cnombre">Nombre</label>
+                        <input type="text" class="form-control" id="cnombre" name="cnombre" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="cdescripcion">Descripción</label>
+                        <input type="text" class="form-control" id="cdescripcion" name="cdescripcion" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="npreciounitario">Precio Unitario</label>
+                        <input type="number" step="0.01" class="form-control" id="npreciounitario" name="npreciounitario" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="nstock">Stock</label>
+                        <input type="number" class="form-control" id="nstock" name="nstock" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="nidcategoria">Categoría</label>
+                        <select id="nidcategoria" name="nidcategoria" class="form-control" required>
+                            <option value="">Seleccione una categoría</option>
+                            @foreach (var categoria in ViewBag.Categorias as IEnumerable<Categoria>)
+                            {
+                                <option value="@categoria.nidcategoria">@categoria.cnombrecategoria</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="dfecharegistro">Fecha de Registro</label>
+                        <input type="date" class="form-control" id="dfecharegistro" name="dfecharegistro" value="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="submitProducto()">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function openCreateModal() {
+            document.getElementById('productoForm').reset();
+            document.getElementById('nidproducto').value = 0;
+            $('#productoModal').modal('show');
+        }
+
+        function openEditModal(id) {
+            fetch(`/Producto/GetProductoById/${id}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Error al obtener los datos del producto.');
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('nidproducto').value = data.nidproducto;
+                    document.getElementById('cnombre').value = data.cnombre;
+                    document.getElementById('cdescripcion').value = data.cdescripcion;
+                    document.getElementById('npreciounitario').value = data.npreciounitario;
+                    document.getElementById('nstock').value = data.nstock;
+                    document.getElementById('nidcategoria').value = data.nidcategoria;
+                    document.getElementById('dfecharegistro').value = new Date(data.dfecharegistro).toISOString().split('T')[0];
+                    $('#productoModal').modal('show');
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert('Error al cargar los datos del producto.');
+                });
+        }
+
+        function submitProducto() {
+    const nombre = document.getElementById('cnombre').value.trim();
+    if (!nombre) {
+        alert("El campo 'Nombre del Producto' es obligatorio.");
+        return;
+    }
+
+    const data = {
+        nidProducto: document.getElementById('nidproducto').value || 0,
+        cNombre: nombre,
+        cDescripcion: document.getElementById('cdescripcion').value.trim() || null,
+        nPrecioUnitario: document.getElementById('npreciounitario').value || 0,
+        nStock: document.getElementById('nstock').value || 0,
+        nidCategoria: document.getElementById('nidcategoria').value || null,
+        dFechaRegistro: document.getElementById('dfecharegistro').value || null
+    };
+
+    fetch('/Producto', {
+        method: data.nidProducto === 0 ? 'POST' : 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+        .then(response => response.ok ? location.reload() : alert('Error al guardar el producto.'))
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al procesar la solicitud.');
+        });
+}
+
+
+        function deleteProducto(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+                fetch(`/Producto/${id}`, { method: 'DELETE' })
+                    .then(response => {
+                        if (response.ok) location.reload();
+                        else alert('Error al eliminar el producto.');
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+        }
+    </script>
+}

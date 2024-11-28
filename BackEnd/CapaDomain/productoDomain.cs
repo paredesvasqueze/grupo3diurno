@@ -25,6 +25,19 @@ namespace CapaDomain
             }
         }
 
+        public producto GetProductoId(int nIdProducto)
+        {
+            try
+            {
+                return _productoRepository.GetProductoId(nIdProducto);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
         public int InsertarProducto(producto oProducto)  // Asegúrate de que el tipo de retorno sea int
         {
             try
@@ -49,15 +62,15 @@ namespace CapaDomain
             }
         }
 
-        public int EliminarProducto(int idProducto)  // Asegúrate de que el tipo de retorno sea int
+        public int EliminarProducto(Int32 idproducto)
         {
             try
             {
-                return _productoRepository.EliminarProducto(idProducto);
+                return _productoRepository.EliminarProducto(idproducto);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception("Error al eliminar producto: " + ex.Message);
+                throw;
             }
         }
     }

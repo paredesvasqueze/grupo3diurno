@@ -55,7 +55,7 @@ namespace CapaDomain
         {
             try
             {
-                return _proveedorRepository.Eliminarproveedor(oproveedor);
+                return _proveedorRepository.EliminarProveedor(oproveedor.nidProveedor);
             }
             catch (Exception)
             {

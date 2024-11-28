@@ -2,7 +2,7 @@
 {
     public class Metodopago
     {
-        public int nidmetodopago { get; set; } 
+        public int nidmetodopago { get; set; }
         public string? cmetodopago { get; set; }   
     }
 }
