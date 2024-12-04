@@ -8,6 +8,7 @@
         public decimal npreciounitario { get; set; }
         public int nstock { get; set; }
         public int nidcategoria { get; set; }
+        public string? categoria { get; set; }
         public DateTime dfecharegistro { get; set; }
     }
 }

@@ -7,5 +7,7 @@
         public int nidproducto { get; set; }
         public int ncantidad { get; set; }
         public int npreciounitario { get; set; }
+        public string? cdetalle { get; set; }
+        public string? cnombre { get; set; }
     }
 }
