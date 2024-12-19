@@ -26,12 +26,10 @@
                 <td>@item.ntotal.ToString("C")</td>
                 <td>
                     <button class="btn btn-warning"
-                            onclick="openEditModal(@item.nidcompra,
-                                                  @item.cnombreproveedor,
-                                                  '@item.dfechacompra.ToString("yyyy-MM-dd")',
-                                                  @item.ntotal)">
+                            onclick="openEditModal(@item.nidcompra, '@Html.Raw(item.cnombreproveedor)', '@item.dfechacompra.ToString("yyyy-MM-dd")', @item.ntotal)">
                         Editar
                     </button>
+
                     <button class="btn btn-danger" onclick="deleteCompra(@item.nidcompra)">Eliminar</button>
                 </td>
             </tr>
